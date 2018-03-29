@@ -35,59 +35,59 @@
     export default{
         name: 'sendCodeField',
         props: [],
-        data () {
-        return {
-            phone: null,
-            code: null,
-            counter: 0
-        }
-    },
-    computed: {
-        errorPhone () {
-            if (this.phone == null || this.checkPhone(this.phone)) {
-                return false
+        data: function () {
+            return {
+                phone: null,
+                code: null,
+                counter: 0
             }
-
-            return '手机号码不正确！';
         },
-        errorCode () {
-            if (this.code == null || this.code.length == 4) {
-                return false
-            }
-
-            return '4 位验证码'
-        }
-    },
-    methods: {
-        startCount (value = 60) {
-            this.counter = value
-
-            var self = this
-            var clock = setInterval(function () {
-                if (self.counter === 0) {
-                    clearInterval(clock)
-                    return
+        computed: {
+            errorPhone: function() {
+                if (this.phone == null || this.checkPhone(this.phone)) {
+                    return false;
                 }
-                self.counter -= 1
-            }, 1000)
-        },
-        sendCode () {
-            if (this.phone == null || this.counter > 0 || !this.checkPhone(this.phone)) {
-                return
-            }
 
-            var self = this
-            this.$http.post('/api/phone/code', {phone: this.phone})
-                    .then(function (response) {
-                        self.startCount()
-                    })
-                    .then(function (error) {
-                        console.log(error)
-                    })
+                return '手机号码不正确！';
+            },
+            errorCode: function() {
+                if (this.code == null || this.code.length == 4) {
+                return false
+                }
+
+                return '4 位验证码';
+            }
         },
-        checkPhone: function (phone) {
-            return !!phone.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/)
+        methods: {
+            startCount: function(v){
+                this.counter = v?v:60;
+
+                var self = this;
+                var clock = setInterval(function () {
+                    if (self.counter === 0) {
+                        clearInterval(clock);
+                        return;
+                    }
+                    self.counter -= 1;
+                }, 1000);
+            },
+            sendCode: function(){
+                if (this.phone == null || this.counter > 0 || !this.checkPhone(this.phone)) {
+                    return;
+                }
+
+                var self = this;
+                this.$http.post('/api/phone/code', {phone: this.phone})
+                        .then(function (response) {
+                            self.startCount();
+                        })
+                        .then(function (error) {
+                            console.log(error);
+                        });
+            },
+            checkPhone: function(phone) {
+                return !!phone.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/);
+            }
         }
-    }
-    }
+    };
 </script>
