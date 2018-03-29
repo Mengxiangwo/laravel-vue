@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Toplan\PhpSms\PhpSmsServiceProvider;
+use Toplan\PhpSms\Sms;
+use App\MobileHistory;
 
 class SendVerifyCode implements ShouldQueue
 {
@@ -47,6 +48,13 @@ class SendVerifyCode implements ShouldQueue
             'code' => $code
         ];
 
-        PhpSms::make()->to($this->phone)->template($templates)->data($templateData)->content($content)->send();
+        $mHistory = new MobileHistory();
+        $mHistory->insert(array(
+            'msg_type' => 1,
+            'phone' => $this->phone,
+            'msg_content' => $content,
+            'add_time' => date('Y-m-d H:i:s')
+        ));
+        Sms::make()->to($this->phone)->template($templates)->data($templateData)->content($content)->send();
     }
 }

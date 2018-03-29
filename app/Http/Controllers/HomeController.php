@@ -26,4 +26,8 @@ class HomeController extends Controller
     {
         return view('home')->withArticles(Articles::all());
     }
+
+    public function phpinfo() {
+        return phpinfo();
+    }
 }

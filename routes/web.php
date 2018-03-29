@@ -17,7 +17,7 @@ Route::get('/time', function () {
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/phpinfo', 'HomeController@phpinfo');
 
 Route::get('/user', 'UserController@user');
 
@@ -32,6 +32,12 @@ Route::get('/request/test', 'RequestController@test');
 Route::post('/request/test', 'RequestController@test');
 
 Route::get('/phone/code', 'ApiController@sendVerifyCode');
+
+Route::get('/job/demo', function() {
+    dispatch(new \App\Jobs\Demo());
+});
+
+Route::get('/send', 'DefaultController@index');
 //Route::post('/phone/code', 'ApiController@sendVerifyCode');
 
 /*Route::get('testCsrf',function(){
